@@ -30,7 +30,7 @@ if(isset($_POST['modifier'])){
         if ($newPassword == $newConfirmPassword) {
 
             $recupUser = $conn->prepare('SELECT * FROM `utilisateurs` WHERE login = ?');
-            $recupUser->execute(array($newLogin));
+            $recupUser->execute(array($hashLogin));
             
             $foundLogin = ($recupUser->rowCount() > 0);
             
@@ -41,12 +41,12 @@ if(isset($_POST['modifier'])){
 
                 // just update the passwords
                 $updatePassword = $conn->prepare("UPDATE `utilisateurs` SET `password`= ? WHERE id = ?");
-                $updatePassword->execute(array($newPassword, $id));
+                $updatePassword->execute(array($hashPassword, $id));
                 echo "<p class='success-msg'>Password updated successfully</p>";
 
             } elseif (!$foundLogin) {
                 $updatePassword = $conn->prepare("UPDATE `utilisateurs` SET `login` = ?,  `password` = ? WHERE id = ?");
-                $updatePassword->execute(array($newLogin, $newPassword, $id));
+                $updatePassword->execute(array($newLogin, $hashPassword, $id));
                 echo "<p class='success-msg'>Profile updated successfully</p>";
 
 
